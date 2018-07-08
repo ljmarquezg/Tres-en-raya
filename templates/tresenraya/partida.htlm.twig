@@ -1,24 +1,71 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
 
-<div class="example-wrapper">
-    <div class="row">
-        Partida: <span id="juego_id">{{ juego.id }}</span> | Estado: {{ juego.estado }} | Turnos Restantes: <span id="restantes">{{ juego.turnos }}</span> | Jugador en turno: {{ juego.jugador }}
+{% block body %}
+{% include('/common/sidebar.html.twig') %}
+<div class="container">
+
+{% if (estado) %}
+<div class="container bootstrap snippet">
+    {% if (juego.estado != "En curso") %}
+        {% if juego.estado == "Empate"%}
+        <div class="alert alert-success alert-white rounded">
+            <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
+                <div class="icon">
+                        <i class="fa fa-handshake-o"></i>
+                </div>
+                <p><strong> Juego Empatado</strong></br> <span class="small">Intenta una mejor estrategia la próxima vez</span></p>
+            </button>
+        </div>
+        {% else %}
+        <div class="alert alert-success alert-white rounded">
+            <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
+                <div class="icon">
+                        {% if (juego.ganador == 1) %}
+                        <i class="fa fa-times"></i>
+                    {% elseif (juego.ganador == 2) %}
+                        <i class="fa fa-circle-o"></i>
+                    {% endif %}
+                </div>
+                <p><strong> Felicidades Jugador {{ juego.ganador }} </strong></br> <span class="small">has ganado esta partida</span></p>
+            </button>
+        </div>
+        {% endif %}
+    {% endif %}
+</div>
+{% endif %}
+    <div id="loader" class="animationload">
+        <div class="osahanloading"></div>
     </div>
-    <div class="row">
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-    {{ form_end(form) }}
-    </dv>
-    <div id="tablero">
-        {% for i in 0..8 %}
-        <button type="submit" id="{{ i + 1 }}" class="posicion btn btn-outline-secondary jugador-{{ juego.jugador }}" data-jugador="{{ juego.jugador }}">
-           <i class="{{ tablero[i] }}"></i>
-        </button>
-        {% endfor %}
+    <div class="example-wrapper">
+        <div class="row">
+            {{ form_start(form, { 'attr': {'id': 'partida'}}) }}
+                {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </dv>
+        <div id="tablero">
+        {% if (linea) %}
+        <div class="ganador-{{ linea }}"></div>
+        {% endif %}
+            {% for i in 0..8 %}
+                {% if (i > 0 and i % 2 == 0) %}
+                    <div class="linea-{{ i }}"></div>
+                {% endif %}
+                <button type="submit" id="{{ i + 1 }}" data-jugador="{{ juego.jugador }}"
+                     {% if (juego.ganador != 0) %} 
+                        disabled = "disabled"
+                    {% endif %}
+                        class="posicion btn btn-outline-secondary 
+                            {% if (juego.ganador == 0) %}
+                                jugador-{{ juego.jugador }}
+                            {% endif %}">
+                    <i class="{{ tablero[i] }}"></i>
+                </button>
+            {% endfor %}
+        </div>
     </div>
 </div>
+</div><!--Content-->
 {% endblock %}
 
 {% block javascripts %}

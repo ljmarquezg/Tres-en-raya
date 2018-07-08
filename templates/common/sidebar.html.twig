@@ -1,0 +1,34 @@
+    <!-- Sidebar -->
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3 id="status" >Estado</h3>
+        </div>
+
+        <ul class="list-unstyled components">
+            <li class="nav-item turno">
+               <p> 
+                <strong>Jugador en turno:</strong><br>
+                    {% if juego.jugador == 1 %}
+                        <i class="fa fa-times"></i>
+                    {% else %}
+                        <i class="fa fa-circle-o"></i>
+                    {% endif %}
+                </p>
+            </li>
+            <li class="nav-item">
+               <strong>Partida: </strong><span id="juego_id">{{ juego.id }} </span>
+            </li>
+            <li class="nav-item">
+               <strong>Estado:</strong> {{ juego.estado }}
+            </li>
+            <li class="nav-item">
+              <strong>Turnos Restantes:</strong> <span id="restantes">{{ juego.turnos }} </span>
+            </li>
+
+            <li>
+                <a href="reiniciar/{{ juego.id }}" class="btn btn-success" >Reiniciar Partida</a>
+            </li>
+        </ul>
+    </nav>
+    <div id="content"> <!--Content-->
+</div>
