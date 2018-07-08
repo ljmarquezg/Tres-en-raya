@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div class="example-wrapper">
+    <div class="row">
+        Partida: <span id="juego_id">{{ juego.id }}</span> | Estado: {{ juego.estado }} | Turnos Restantes: <span id="restantes">{{ juego.turnos }}</span> | Jugador en turno: {{ juego.jugador }}
+    </div>
+    <div class="row">
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+    {{ form_end(form) }}
+    </dv>
+    <div id="tablero">
+        {% for i in 0..8 %}
+        <button type="submit" id="{{ i + 1 }}" class="posicion btn btn-outline-secondary jugador-{{ juego.jugador }}" data-jugador="{{ juego.jugador }}">
+           <i class="{{ tablero[i] }}"></i>
+        </button>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/js/main.js"></script>
+{% endblock %}
