@@ -27,7 +27,6 @@
             </thead>
             <tbody>
     {% for partida in listado %}
-            
                 <tr>
                     <td class="text-center">
                         {{ partida.id }}
@@ -37,14 +36,14 @@
                     </td>
                     <td>
                         {% if partida.ganador == 0 %}
-                            <a href="/partida/{{ partida.id }}" class="btn btn-outline-primary badge">Continuar partida</a>
+                            <a href="/partida/{{ partida.id }}" class="btn btn-outline-primary badge pull-right">Continuar partida</a>
                         {% else %}
                                 {% if (partida.ganador == 3) %}
                                     No hubo ganador
                                 {% else %}
                                     {{ partida.ganador }}
                                 {% endif %}
-                            <a href="/partida/{{ partida.id }}" class="btn btn-outline-secondary badge">Ver resultado</a>
+                            <a href="/partida/{{ partida.id }}" class="btn btn-outline-secondary badge pull-right">Ver resultado</a>
                         {% endif %}
                     </td>
                 </tr>

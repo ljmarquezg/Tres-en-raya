@@ -10,12 +10,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-
 use App\Entity\Juego;
 
 
@@ -62,7 +56,6 @@ class TresenrayaController extends Controller
      * @Route("/partida/reiniciar/{id}", name="movimiento")
      * @Method({ "POST", "GET" })
      */
-
     public function reiniciar(Request $request, $id){
 
         $juego = $this->getDoctrine()->getRepository(Juego::class)->find($id);
@@ -80,27 +73,9 @@ class TresenrayaController extends Controller
         $juego->setPos8(0);
         $juego->setPos9(0);
 
-        // if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($juego);
-            // try {
-                $em->flush();
-                // $status = "saved";
-            // } catch (\Exception $e) {
-                    // $status = $e->getMessage();
-            // }    
-        // }else{
-            // $status = "invalid";
-        // }
-
-        // return new JsonResponse(array('status' => $status));
-
-
-        // if($request->isXmlHttpRequest() && $request->getMethod() == 'POST')
-        // {
-        //     $juego->setPos1(0); 
-        // }
-            
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($juego);
+        $entityManager->flush();
         return $this->redirectToRoute('partida', array('id' => $juego->getId()));
     }
 
@@ -237,40 +212,6 @@ class TresenrayaController extends Controller
 
             $form->handleRequest($request);
 
-            
-        // if($request->isXmlHttpRequest() && $request->getMethod() == 'POST')
-        // {
-        //     $encoders = array(new JsonEncoder());
-        //     $normalizers = array(new ObjectNormalizer());
-        //     $serializer = new Serializer($normalizers, $encoders);
-        //     $em = $this->getDoctrine()->getManager();
-        //     $juego =  $em->getRepository(Juego::class)->find($id);
-        //     $response = new JsonResponse();
-        //     $response->setStatusCode(200);
-        //     $response->setData(array(
-        //         'response' => 'success',
-        //         'juego' => $serializer->serialize($juego, 'json'),
-        //     ));          
-        //         $form = $form->getData();
-        //         $entityManager = $this->getDoctrine()->getManager();
-        //         $entityManager->flush();
-        //     return $response;
-        // }else{
-        //     return new Response('Webo');
-        // }
-
-            // if($request->isXmlHttpRequest())
-            // {
-            //     $encoders = array(new JsonEncoder());
-            //     $normalizers = array(new ObjectNormalizer());
-            //     $serializer = new Serializer($normalizers, $encoders);
-            //     $form = $form->getData();
-            //     $entityManager = $this->getDoctrine()->getManager();
-            //     $entityManager->persist($form);
-            //     $entityManager->flush();
-            //     return new Response('success');
-            // }
-
             $response = $this->verificar($juego->getId());
                 switch ($response['mensaje']){
                     case "En curso":
@@ -314,11 +255,8 @@ class TresenrayaController extends Controller
                     'linea' => $response['linea']
                 )
             );
-        // }
     }
     
-
-
     public function obtenerIcono($posicion){
         switch ($posicion){
             case 1:
@@ -348,7 +286,6 @@ class TresenrayaController extends Controller
             $status['mensaje'] = 'Empate';
             $status['ganador'] = 'Empate';
         }
-
         /**
          * Verificar filas;
         */
@@ -369,51 +306,7 @@ class TresenrayaController extends Controller
                 $status['ganador'] = $tablero[$i];
             }
         }
-        //  /**
-        //  * Verificar Diagonales;
-        // */
-        // for($i=0; $i < 3; $i++){
-        //     if ($tablero[$i] == 1 || $tablero[$i] == 2 && $tablero[$i] == $tablero[$i+3] &&  $tablero[$i+3] == $tablero[$i+6] ){
-        //         $status['mensaje'] = 'Game Over';
-        //         $status['ganador'] = $tablero[$i];
-        //     }
-        //     echo $tablero[$i] .' '. $tablero[$i+3] . ' ' .$tablero[$i+6] ."<br>";
-        // }
-           
-        // /**
-        //  * Verificar filas
-        //  */
-        // if ( ($tablero[0] == 1 || $tablero[0] == 2) && $tablero[0] == $tablero[1] &&  $tablero[1] == $tablero[2] ){
-        //     echo '<h1>Linea1</h1>';
-        //     $status['mensaje'] = 'Game Over';
-        //     $status['ganador'] = $tablero[0];
-        // }else if ( ($tablero[3] == 1 || $tablero[3] == 2) && $tablero[3] == $tablero[4] &&  $tablero[4] == $tablero[5] ){
-        //     echo '<h1>Linea2</h1>';
-        //     $status['mensaje'] = 'Game Over';
-        //     $status['ganador'] = $tablero[3];
-        // }else if ( ($tablero[6] == 1 || $tablero[6] == 2) && $tablero[6] == $tablero[7] &&  $tablero[7] == $tablero[8] ){
-        //     echo '<h1>Linea3</h1>';
-        //     $status['mensaje'] = 'Game Over';
-        //     $status['ganador'] = $tablero[6];
-        // };
-        // /**
-        //  * Verificar columnas
-        //  */
-        // if ( ($tablero[0] == 1 || $tablero[0] == 2) && $tablero[0] == $tablero[3] &&  $tablero[3] == $tablero[6] ){
-        //     echo '<h1>Coumna1</h1>';
-        //     $status['mensaje'] = 'Game Over';
-        //     $status['ganador'] = $tablero[0];
-        // }else if ( ($tablero[1] == 1 || $tablero[1] == 2) && $tablero[1] == $tablero[4] &&  $tablero[4] == $tablero[7] ){
-        //     echo '<h1>Columna2</h1>';
-        //     $status['mensaje'] = 'Game Over';
-        //     $status['ganador'] = $tablero[1];
-        // }else if ( ($tablero[2] == 1 || $tablero[2] == 2) && $tablero[2] == $tablero[5] &&  $tablero[5] == $tablero[8] ){
-        //     echo '<h1>LColumna3</h1>';
-        //     $status['mensaje'] = 'Game Over';
-        //     $status['ganador'] = $tablero[2];
-        // };
-
-        /**
+       /**
          * Verificar Diagonales
          */
         if ( ($tablero[0] == 1 || $tablero[0] == 2) && $tablero[0] == $tablero[4] &&  $tablero[4] == $tablero[8] ){
@@ -425,53 +318,6 @@ class TresenrayaController extends Controller
             $status['mensaje'] = 'Game Over';
             $status['ganador'] = $tablero[2];
         };
-
-                /**
-         * Verificar columnas
-         */
-        // for ($i=0; $i < 9; $i+3 ){
-        //     if ( ($tablero[$i] == 1 || $tablero[$i] == 2) && $tablero[$i] == $tablero[$i+1] &&  $tablero[$i+1] == $tablero[$i+2] ){
-        //         echo '<h1>Linea '.$i.'</h1>';
-        //         $status['mensaje'] = 'Game Over';
-        //         $status['ganador'] = $tablero[1];
-        //     }
-            // }else if ( ($tablero[3] == 1 || $tablero[3] == 2) && $tablero[3] == $tablero[4] &&  $tablero[4] == $tablero[5] ){
-            //     echo '<h1>Linea2</h1>';
-            //     $status['mensaje'] = 'Game Over';
-            //     $status['ganador'] = $tablero[1];
-            // }else if ( ($tablero[0+6] == 1 || $tablero[0+6] == 2) && $tablero[0+6] == $tablero[1+6] &&  $tablero[1+6] == $tablero[2+6] ){
-            //     echo '<h1>Linea3</h1>';
-            //     $status['mensaje'] = 'Game Over';
-            //     $status['ganador'] = $tablero[1];
-            // };
-        //     return $status;
-        // }
-
-            // }
-        // function recorrer($tablero){
-        //     // for ($i=0; $i < 9; $i+3 ){
-        //     //     if ( $tablero[$i] == $tablero[($i+1)] &&  $tablero[($i+1)] == $tablero[($i+2)] ){
-        //     //         $status = 'El ganador es el jugador '.$tablero[$i].'Fila '.$i;
-        //     //     }
-        //     // }
-        //     // for ($i=0; $i < 9; $i+3 ){
-        //     //     if ( $tablero[$i] == $tablero[($i+3)] &&  $tablero[($i+3)] == $tablero[($i+6)] ){
-        //     //         $status = 'El ganador es el jugador '.$tablero[$i].'Columna '.$i;
-        //     //         return;
-        //     //     }
-        //     // }
-        //     // if ( $tablero[0] == $tablero[4] &&  $tablero[4] == $tablero[8] ){
-        //     //     $status = 'El ganador es el jugador '.$tablero[0].'Diagonal';
-        //     //     return;
-        //     // }
-        //     // if ( $tablero[2] == $tablero[4] &&  $tablero[4] == $tablero[6] ){
-        //     //     $status = 'El ganador es el jugador '.$tablero[0].'Diagonal';
-        //     //     return;
-        //     // }
-        //     return $status;
-        // }
-        
-        // $status = recorrer($tablero);
         return $status;
     }
 

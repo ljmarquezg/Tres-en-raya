@@ -7,6 +7,15 @@
 
 {% if (estado) %}
 <div class="container bootstrap snippet">
+<div id="mensaje" class="alert alert-success alert-white rounded" style="display:none">
+        <button type="button" aria-hidden="true" class="close">×</button>
+        <div class="icon">
+            <i class="fa fa-bullhorn"></i>
+        </div>
+        <p><strong> Movimiento Inválido</strong></br> <span class="small">Ya existe un movimiento en esa posición</span></p>
+    </button>
+</div>
+
     {% if (juego.estado != "En curso") %}
         {% if juego.estado == "Empate"%}
         <div class="alert alert-success alert-white rounded">

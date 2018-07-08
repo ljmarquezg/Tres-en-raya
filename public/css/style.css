@@ -5,7 +5,6 @@ body{
     display: flex;
     width: 100%;
     align-items: stretch;
-    background: #013750;
 }
 
 
@@ -157,12 +156,12 @@ button:disabled {
 .ganador-Diagonal2{
     animation: 1.5s linear 0s normal none  running diagonal2;
     top: 30vh;
-    transform: rotate(135deg);
+    transform: rotate(-45deg);
     opacity: 0.75;
-    -webkit-transform: rotate(135deg);
-    -moz-transform: rotate(135deg);
-    -ms-transform: rotate(135deg);
-    -o-transform: rotate(135deg);
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
     -webkit-animation: 1.5s linear 0s normal none  running diagonal2;
 }
 
@@ -265,17 +264,15 @@ button:disabled {
     0% {
         background: #2eff7b none repeat scroll 0 0;
         width: 0%;
-        top: 40vh;
+        top: 60vh;
     }
     50% {
         background: #85d6de none repeat scroll 0 0;
-        top: 35vh;
         width: 50%;
     }
     100% {
         background: #2eff7b none repeat scroll 0 0;
         width: 100%;
-        top: 30vh;
     }
 }
 
